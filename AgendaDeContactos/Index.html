@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/x-icon;base64,AAABAAEAICAAAAAA" type="image/x-icon">
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/Vue3.js"></script>
+    <title>Agenda Telefónica</title>
+</head>
+
+<body>
+    <header>
+        <h1>Agenda Telefónica</h1>
+    </header>
+    <section id="app">
+        <article>
+            <h2>Nuevo Contacto</h2>
+            <form @submit.prevent="agregarContacto">
+                <p>Nombre:</p>
+                <input v-model="nuevoContacto.nombre" placeholder="Nombre" required>
+                <p>Teléfono:</p>
+                <input v-model="nuevoContacto.telefono" placeholder="Teléfono" required>
+                <p>Categoría:</p>
+                <select v-model="nuevoContacto.categoria" required>
+                    <option value="" disabled selected>Categoría</option>
+                    <option value="Familiar">Familiar</option>
+                    <option value="Amistad">Amistad</option>
+                    <option value="Salud">Salud</option>
+                    <option value="Laboral">Laboral</option>
+                </select>
+                <button type="submit">Agregar</button>
+            </form>
+        </article>
+        <article>
+            <div class="table-wrapper">
+                <table v-if="contactos.length">
+                    <thead>
+                        <tr>
+                            <th>Acciones</th>
+                            <th>Nombre</th>
+                            <th>Teléfono</th>
+                            <th>Categoría</th>
+                            <th>Mensajes</th>
+                            <th>Llamadas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(contacto, index) in contactos" :key="index">
+                            <td>
+                                <button class="btn-delete" @click="eliminarContacto(index)">🗑</button>
+                            </td>
+                            <td>{{ contacto.nombre }}</td>
+                            <td>{{ contacto.telefono }}</td>
+                            <td>{{ contacto.categoria }}</td>
+                            <td>
+                                <div class="button-group">
+                                    <button @click="decrementarMensajes(index)"
+                                        :disabled="contacto.mensajes === 0">-</button>
+                                    {{ contacto.mensajes }}
+                                    <button @click="incrementarMensajes(index)"
+                                        :disabled="contacto.mensajes === 25">+</button>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="button-group">
+                                    <button @click="decrementarLlamadas(index)"
+                                        :disabled="contacto.llamadas === 0">-</button>
+                                    {{ contacto.llamadas }}
+                                    <button @click="incrementarLlamadas(index)"
+                                        :disabled="contacto.llamadas === 25">+</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p v-if="!contactos.length">No hay contactos.</p>
+            </div>
+        </article>
+        <article>
+            <h3>Resumen</h3>
+            <div class="resumen-container">
+                <p>Contactos: {{ cantidadContactos }}</p>
+                <p>Total de Mensajes: {{ totalMensajes }}</p>
+                <p>Total de Llamadas: {{ totalLlamadas }}</p>
+            </div>
+        </article>
+    </section>
+    <script src="js/script.js"></script>
+</body>
+
+</html>
